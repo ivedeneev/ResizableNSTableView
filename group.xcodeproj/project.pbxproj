@@ -12,6 +12,8 @@
 		D6D76A0C1DE23DBB0093928C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D76A0B1DE23DBB0093928C /* ViewController.m */; };
 		D6D76A0E1DE23DBB0093928C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6D76A0D1DE23DBB0093928C /* Assets.xcassets */; };
 		D6D76A111DE23DBB0093928C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6D76A0F1DE23DBB0093928C /* Main.storyboard */; };
+		D6D76A1B1DE2444B0093928C /* KGTextMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D76A1A1DE2444B0093928C /* KGTextMessageCell.m */; };
+		D6D76A231DE2639A0093928C /* KGMessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D76A221DE2639A0093928C /* KGMessageTextView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,10 @@
 		D6D76A0D1DE23DBB0093928C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D6D76A101DE23DBB0093928C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D6D76A121DE23DBB0093928C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D6D76A191DE2444B0093928C /* KGTextMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KGTextMessageCell.h; sourceTree = "<group>"; };
+		D6D76A1A1DE2444B0093928C /* KGTextMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KGTextMessageCell.m; sourceTree = "<group>"; };
+		D6D76A211DE2639A0093928C /* KGMessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KGMessageTextView.h; sourceTree = "<group>"; };
+		D6D76A221DE2639A0093928C /* KGMessageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KGMessageTextView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +70,10 @@
 				D6D76A0F1DE23DBB0093928C /* Main.storyboard */,
 				D6D76A121DE23DBB0093928C /* Info.plist */,
 				D6D76A071DE23DBB0093928C /* Supporting Files */,
+				D6D76A191DE2444B0093928C /* KGTextMessageCell.h */,
+				D6D76A1A1DE2444B0093928C /* KGTextMessageCell.m */,
+				D6D76A211DE2639A0093928C /* KGMessageTextView.h */,
+				D6D76A221DE2639A0093928C /* KGMessageTextView.m */,
 			);
 			path = group;
 			sourceTree = "<group>";
@@ -145,8 +155,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6D76A231DE2639A0093928C /* KGMessageTextView.m in Sources */,
 				D6D76A0C1DE23DBB0093928C /* ViewController.m in Sources */,
 				D6D76A091DE23DBB0093928C /* main.m in Sources */,
+				D6D76A1B1DE2444B0093928C /* KGTextMessageCell.m in Sources */,
 				D6D76A061DE23DBB0093928C /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
