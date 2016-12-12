@@ -61,16 +61,35 @@ static CGFloat const kMaxWidthMultiplier = 0.5;
 
 - (void)test:(NSNotification *)not {
 //    [self.tableView reloadData];
-    NSScrollView *scrView = self.tableView.superview.superview;
+    NSScrollView *scrView = self.tableView.enclosingScrollView;
     self.scrWidth = CGRectGetWidth(scrView.contentView.bounds);
     NSRange visRows = [self.tableView rowsInRect:scrView.contentView.bounds];
+    NSRange allRows = NSMakeRange(0, self.tableView.numberOfRows);
     
     [NSAnimationContext beginGrouping];
     [NSAnimationContext currentContext].duration = 0.0;
     NSIndexSet *idxSet = [NSIndexSet indexSetWithIndexesInRange:visRows];
     [self.tableView noteHeightOfRowsWithIndexesChanged:idxSet];
-    [self.tableView reloadDataForRowIndexes:idxSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    
+//    NSIndexSet *idxSet = [NSIndexSet indexSetWithIndexesInRange:allRows];
+//    [self.tableView noteHeightOfRowsWithIndexesChanged:idxSet];
+    
     [NSAnimationContext endGrouping];
+    
+    redrawTableView(self.tableView, visRows, self.cache);
+//    redrawTableView(self.tableView, allRows, self.cache);
+}
+
+void redrawTableView(NSTableView *tableView, NSRange range, NSMutableDictionary *cacheDict) {
+    for (int i = range.location; i < range.location + range.length; i++) {
+        KGTextMessageCell *cell = [tableView viewAtColumn:0 row:i makeIfNecessary:NO];
+        NSArray *dims = cacheDict[@(i)];
+        int w = [dims.firstObject intValue];
+        int h = [dims.lastObject intValue];
+        cell.textView.enclosingScrollView.frame = CGRectMake(100.0, 10.0, w, h);
+//        NSLog(@"%d  %f %f", i, w, h);
+    }
+
 }
 
 - (void)setScrWidth:(CGFloat)scrWidth {
@@ -101,28 +120,33 @@ static CGFloat const kMaxWidthMultiplier = 0.5;
     self.scrWidth = CGRectGetHeight(self.view.window.frame);
     KGTextMessageCell *cellView = [tableView makeViewWithIdentifier:@"cell" owner:self];
     
-//    cellView.wantsLayer = YES;
-//    cellView.layer.backgroundColor = [NSColor redColor].CGColor;
+    cellView.wantsLayer = YES;
+    cellView.layer.backgroundColor = [NSColor redColor].CGColor;
     NSString *text = _strings[row % 4];
     [cellView configureWithString:text width:CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier];
     NSArray *dims = self.cache[@(row)];
     NSNumber *he = dims.lastObject;
     
     CGRect rect = rectForString(text, CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier);
-    CGFloat w = CGRectGetWidth(rect);
-    CGFloat h = CGRectGetHeight(rect);
-    
+    CGFloat w = ceil(CGRectGetWidth(rect));
+    CGFloat h = ceil(CGRectGetHeight(rect));
+//
     if (ceilf(h) != ceilf(he.floatValue)) {
 //        [self test:[NSNotification new]];
         dispatch_async(dispatch_get_main_queue(), ^{
+            NSScrollView *scrView = self.tableView.enclosingScrollView;
+            self.scrWidth = CGRectGetWidth(scrView.contentView.bounds);
+            NSRange visRows = [self.tableView rowsInRect:scrView.contentView.bounds];
             NSIndexSet *idxSet = [NSIndexSet indexSetWithIndex:row];
             [self.tableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:row]];
             [NSAnimationContext beginGrouping];
-            [NSAnimationContext currentContext].duration = 0.1;
-            [self.tableView reloadDataForRowIndexes:idxSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+            [NSAnimationContext currentContext].duration = 0.0;
+//            [self.tableView reloadDataForRowIndexes:idxSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];
             [NSAnimationContext endGrouping];
+            
+            redrawTableView(self.tableView, visRows, self.cache);
         });
-        
+    
 //        NSScrollView *scrView = self.tableView.superview.superview;
 //        self.scrWidth = CGRectGetWidth(scrView.contentView.bounds);
 //        NSRange visRows = [self.tableView rowsInRect:scrView.contentView.bounds];
@@ -137,13 +161,13 @@ static CGFloat const kMaxWidthMultiplier = 0.5;
     }
     
     cellView.textView.superview.superview.frame = CGRectMake(100.0, 10.0, w, h);
-    NSLog(@"cellFOrRow idx [%d] %f", row, CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier);
+//    NSLog(@"cellFOrRow idx [%d] %f", row, CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier);
     
     return cellView;
 }
 
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
-    NSLog(@"heightForRow  ROW [%d] WIDTH [%f]", row, self.tableView.bounds);
+//    NSLog(@"heightForRow  ROW [%d] WIDTH [%f]", row, self.tableView.enclosingScrollView.bounds);
     NSString *text = _strings[row % 4];
     CGRect rect = rectForString(text, CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier);
     [self.cache setObject:@[@(rect.size.width), @(rect.size.height)] forKey:@(row)];
