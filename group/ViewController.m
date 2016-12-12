@@ -66,7 +66,7 @@ static CGFloat const kMaxWidthMultiplier = 0.5;
     NSRange visRows = [self.tableView rowsInRect:scrView.contentView.bounds];
     NSRange allRows = NSMakeRange(0, self.tableView.numberOfRows);
     
-    [NSAnimationContext beginGrouping];
+//    [NSAnimationContext beginGrouping];
     [NSAnimationContext currentContext].duration = 0.0;
     NSIndexSet *idxSet = [NSIndexSet indexSetWithIndexesInRange:visRows];
     [self.tableView noteHeightOfRowsWithIndexesChanged:idxSet];
@@ -74,7 +74,7 @@ static CGFloat const kMaxWidthMultiplier = 0.5;
 //    NSIndexSet *idxSet = [NSIndexSet indexSetWithIndexesInRange:allRows];
 //    [self.tableView noteHeightOfRowsWithIndexesChanged:idxSet];
     
-    [NSAnimationContext endGrouping];
+//    [NSAnimationContext endGrouping];
     
     redrawTableView(self.tableView, visRows, self.cache);
 //    redrawTableView(self.tableView, allRows, self.cache);
@@ -86,7 +86,8 @@ void redrawTableView(NSTableView *tableView, NSRange range, NSMutableDictionary 
         NSArray *dims = cacheDict[@(i)];
         int w = [dims.firstObject intValue];
         int h = [dims.lastObject intValue];
-        cell.textView.enclosingScrollView.frame = CGRectMake(100.0, 10.0, w, h);
+        CGFloat xpos = i % 2 == 0 ? 50 : ceil(CGRectGetWidth(tableView.bounds)) - 50 - w;
+        cell.textView.enclosingScrollView.frame = CGRectMake(xpos, 10.0, w, h);
 //        NSLog(@"%d  %f %f", i, w, h);
     }
 
@@ -120,8 +121,8 @@ void redrawTableView(NSTableView *tableView, NSRange range, NSMutableDictionary 
     self.scrWidth = CGRectGetHeight(self.view.window.frame);
     KGTextMessageCell *cellView = [tableView makeViewWithIdentifier:@"cell" owner:self];
     
-    cellView.wantsLayer = YES;
-    cellView.layer.backgroundColor = [NSColor redColor].CGColor;
+//    cellView.wantsLayer = YES;
+//    cellView.layer.backgroundColor = [NSColor redColor].CGColor;
     NSString *text = _strings[row % 4];
     [cellView configureWithString:text width:CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier];
     NSArray *dims = self.cache[@(row)];
@@ -139,28 +140,18 @@ void redrawTableView(NSTableView *tableView, NSRange range, NSMutableDictionary 
             NSRange visRows = [self.tableView rowsInRect:scrView.contentView.bounds];
             NSIndexSet *idxSet = [NSIndexSet indexSetWithIndex:row];
             [self.tableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:row]];
-            [NSAnimationContext beginGrouping];
+//            [NSAnimationContext beginGrouping];
             [NSAnimationContext currentContext].duration = 0.0;
 //            [self.tableView reloadDataForRowIndexes:idxSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];
-            [NSAnimationContext endGrouping];
+//            [NSAnimationContext endGrouping];
             
             redrawTableView(self.tableView, visRows, self.cache);
         });
-    
-//        NSScrollView *scrView = self.tableView.superview.superview;
-//        self.scrWidth = CGRectGetWidth(scrView.contentView.bounds);
-//        NSRange visRows = [self.tableView rowsInRect:scrView.contentView.bounds];
-//        
-//        [NSAnimationContext beginGrouping];
-//        [NSAnimationContext currentContext].duration = 0.0;
 
-//        [self.tableView noteHeightOfRowsWithIndexesChanged:idxSet];
-//        [self.tableView reloadDataForRowIndexes:idxSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];
-//        [NSAnimationContext endGrouping];
 
     }
-    
-    cellView.textView.superview.superview.frame = CGRectMake(100.0, 10.0, w, h);
+    CGFloat xpos = row % 2 == 0 ? 50 : ceil(CGRectGetWidth(self.tableView.bounds)) - 50 - w;
+    cellView.textView.superview.superview.frame = CGRectMake(xpos, 10.0, w, h);
 //    NSLog(@"cellFOrRow idx [%d] %f", row, CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier);
     
     return cellView;
