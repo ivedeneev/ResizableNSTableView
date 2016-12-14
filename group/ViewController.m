@@ -84,33 +84,12 @@ void redrawTableView(NSTableView *tableView, NSRange range, NSMutableDictionary 
     for (int i = range.location; i < range.location + range.length; i++) {
         KGTextMessageCell *cell = [tableView viewAtColumn:0 row:i makeIfNecessary:NO];
         NSArray *dims = cacheDict[@(i)];
-        int w = [dims.firstObject intValue];
-        int h = [dims.lastObject intValue];
+        int w = [dims.firstObject intValue] + 1;
+        int h = [dims.lastObject intValue]+ 1;
         CGFloat xpos = i % 2 == 0 ? 50 : ceil(CGRectGetWidth(tableView.bounds)) - 50 - w;
         cell.textView.enclosingScrollView.frame = CGRectMake(xpos, 10.0, w, h);
-//        NSLog(@"%d  %f %f", i, w, h);
     }
 
-}
-
-- (void)setScrWidth:(CGFloat)scrWidth {
-    BOOL shouldRedrawTable = ceilf(_scrWidth) != ceilf(scrWidth);
-
-    
-    if (shouldRedrawTable) {
-//        [self.tableView reloadData];
-//        NSScrollView *scrView = (NSScrollView *)self.tableView.superview.superview;
-//        NSRange visRows = [self.tableView rowsInRect:scrView.contentView.bounds];
-//        
-//        [NSAnimationContext beginGrouping];
-//        [NSAnimationContext currentContext].duration = 0.0;
-//        NSIndexSet *idxSet = [NSIndexSet indexSetWithIndexesInRange:visRows];
-//        [self.tableView noteHeightOfRowsWithIndexesChanged:idxSet];
-//        [self.tableView reloadDataForRowIndexes:idxSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];
-//        [NSAnimationContext endGrouping];
-    }
-    
-        _scrWidth = scrWidth;
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
@@ -129,8 +108,8 @@ void redrawTableView(NSTableView *tableView, NSRange range, NSMutableDictionary 
     NSNumber *he = dims.lastObject;
     
     CGRect rect = rectForString(text, CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier);
-    CGFloat w = ceil(CGRectGetWidth(rect));
-    CGFloat h = ceil(CGRectGetHeight(rect));
+    CGFloat w = ceil(CGRectGetWidth(rect)) + 1;
+    CGFloat h = ceil(CGRectGetHeight(rect)) + 1;
 //
     if (ceilf(h) != ceilf(he.floatValue)) {
 //        [self test:[NSNotification new]];
@@ -180,6 +159,7 @@ CGRect rectForString(NSString *string, CGFloat width) {
     [textContainer setLineFragmentPadding:0.0];
     [layoutManager glyphRangeForTextContainer:textContainer];
     size.height = [layoutManager usedRectForTextContainer:textContainer].size.height;
+    size.width = [layoutManager usedRectForTextContainer:textContainer].size.width;
     
     return CGRectMake(0, 0, size.width, size.height);
 }
