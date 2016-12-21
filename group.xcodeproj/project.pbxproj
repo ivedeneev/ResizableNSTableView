@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D6603B4E1E0A89A100A172A9 /* MessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D6603B4D1E0A89A100A172A9 /* MessageItem.m */; };
 		D6D76A061DE23DBB0093928C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D76A051DE23DBB0093928C /* AppDelegate.m */; };
 		D6D76A091DE23DBB0093928C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D76A081DE23DBB0093928C /* main.m */; };
 		D6D76A0C1DE23DBB0093928C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D76A0B1DE23DBB0093928C /* ViewController.m */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D6603B4C1E0A89A100A172A9 /* MessageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageItem.h; sourceTree = "<group>"; };
+		D6603B4D1E0A89A100A172A9 /* MessageItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageItem.m; sourceTree = "<group>"; };
 		D6D76A011DE23DBB0093928C /* group.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = group.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6D76A041DE23DBB0093928C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D6D76A051DE23DBB0093928C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -74,6 +77,8 @@
 				D6D76A1A1DE2444B0093928C /* KGTextMessageCell.m */,
 				D6D76A211DE2639A0093928C /* KGMessageTextView.h */,
 				D6D76A221DE2639A0093928C /* KGMessageTextView.m */,
+				D6603B4C1E0A89A100A172A9 /* MessageItem.h */,
+				D6603B4D1E0A89A100A172A9 /* MessageItem.m */,
 			);
 			path = group;
 			sourceTree = "<group>";
@@ -155,6 +160,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6603B4E1E0A89A100A172A9 /* MessageItem.m in Sources */,
 				D6D76A231DE2639A0093928C /* KGMessageTextView.m in Sources */,
 				D6D76A0C1DE23DBB0093928C /* ViewController.m in Sources */,
 				D6D76A091DE23DBB0093928C /* main.m in Sources */,
@@ -301,6 +307,7 @@
 				D6D76A171DE23DBB0093928C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

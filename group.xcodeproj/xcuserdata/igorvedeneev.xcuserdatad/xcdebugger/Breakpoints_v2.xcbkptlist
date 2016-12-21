@@ -20,12 +20,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "group/ViewController.m"
-            timestampString = "503275144.034312"
+            timestampString = "504007628.391785"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
-            landmarkName = "-setScrWidth:"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "-numberOfRowsInTableView:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

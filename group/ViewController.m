@@ -12,7 +12,7 @@
 static CGFloat const kMaxWidthMultiplier = 0.5;
 
 
-@interface ViewController () {
+@interface ViewController () <NSWindowDelegate> {
 
 }
 @property (weak) IBOutlet NSTableView *tableView;
@@ -46,6 +46,7 @@ static CGFloat const kMaxWidthMultiplier = 0.5;
     _tableView.dataSource = self;
     _tableView.floatsGroupRows = NO;
     
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(test:)
                                                  name:NSViewFrameDidChangeNotification
@@ -54,9 +55,7 @@ static CGFloat const kMaxWidthMultiplier = 0.5;
 
 - (void)viewDidAppear {
     [super viewDidAppear];
-    
-    NSLog(@"viewdidapper %f", CGRectGetWidth(self.tableView.superview.superview.frame));
-    NSLog(@"viewdidapper %f", CGRectGetWidth(self.view.superview.superview.frame));
+    self.view.window.delegate = self;
 }
 
 - (void)test:(NSNotification *)not {
@@ -64,20 +63,15 @@ static CGFloat const kMaxWidthMultiplier = 0.5;
     NSScrollView *scrView = self.tableView.enclosingScrollView;
     self.scrWidth = CGRectGetWidth(scrView.contentView.bounds);
     NSRange visRows = [self.tableView rowsInRect:scrView.contentView.bounds];
-    NSRange allRows = NSMakeRange(0, self.tableView.numberOfRows);
     
-//    [NSAnimationContext beginGrouping];
     [NSAnimationContext currentContext].duration = 0.0;
-    NSIndexSet *idxSet = [NSIndexSet indexSetWithIndexesInRange:visRows];
+     NSIndexSet *idxSet = [NSIndexSet indexSetWithIndexesInRange:visRows];
     [self.tableView noteHeightOfRowsWithIndexesChanged:idxSet];
     
 //    NSIndexSet *idxSet = [NSIndexSet indexSetWithIndexesInRange:allRows];
 //    [self.tableView noteHeightOfRowsWithIndexesChanged:idxSet];
     
-//    [NSAnimationContext endGrouping];
-    
     redrawTableView(self.tableView, visRows, self.cache);
-//    redrawTableView(self.tableView, allRows, self.cache);
 }
 
 void redrawTableView(NSTableView *tableView, NSRange range, NSMutableDictionary *cacheDict) {
@@ -100,8 +94,6 @@ void redrawTableView(NSTableView *tableView, NSRange range, NSMutableDictionary 
     self.scrWidth = CGRectGetHeight(self.view.window.frame);
     KGTextMessageCell *cellView = [tableView makeViewWithIdentifier:@"cell" owner:self];
     
-//    cellView.wantsLayer = YES;
-//    cellView.layer.backgroundColor = [NSColor redColor].CGColor;
     NSString *text = _strings[row % 4];
     [cellView configureWithString:text width:CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier];
     NSArray *dims = self.cache[@(row)];
@@ -110,41 +102,32 @@ void redrawTableView(NSTableView *tableView, NSRange range, NSMutableDictionary 
     CGRect rect = rectForString(text, CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier);
     CGFloat w = ceil(CGRectGetWidth(rect)) + 1;
     CGFloat h = ceil(CGRectGetHeight(rect)) + 1;
-//
+
     if (ceilf(h) != ceilf(he.floatValue)) {
-//        [self test:[NSNotification new]];
         dispatch_async(dispatch_get_main_queue(), ^{
             NSScrollView *scrView = self.tableView.enclosingScrollView;
             self.scrWidth = CGRectGetWidth(scrView.contentView.bounds);
             NSRange visRows = [self.tableView rowsInRect:scrView.contentView.bounds];
             NSIndexSet *idxSet = [NSIndexSet indexSetWithIndex:row];
             [self.tableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:row]];
-//            [NSAnimationContext beginGrouping];
             [NSAnimationContext currentContext].duration = 0.0;
-//            [self.tableView reloadDataForRowIndexes:idxSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];
-//            [NSAnimationContext endGrouping];
             
             redrawTableView(self.tableView, visRows, self.cache);
         });
-
-
     }
     CGFloat xpos = row % 2 == 0 ? 50 : ceil(CGRectGetWidth(self.tableView.bounds)) - 50 - w;
     cellView.textView.superview.superview.frame = CGRectMake(xpos, 10.0, w, h);
-//    NSLog(@"cellFOrRow idx [%d] %f", row, CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier);
     
     return cellView;
 }
 
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
-//    NSLog(@"heightForRow  ROW [%d] WIDTH [%f]", row, self.tableView.enclosingScrollView.bounds);
     NSString *text = _strings[row % 4];
     CGRect rect = rectForString(text, CGRectGetWidth(self.tableView.bounds) * kMaxWidthMultiplier);
     [self.cache setObject:@[@(rect.size.width), @(rect.size.height)] forKey:@(row)];
     
     return CGRectGetHeight(rect) + 15.0;
 }
-
 
 CGRect rectForString(NSString *string, CGFloat width) {
     NSFont *font = [NSFont fontWithName:@"Helvetica Neue" size:16.0];
@@ -162,6 +145,13 @@ CGRect rectForString(NSString *string, CGFloat width) {
     size.width = [layoutManager usedRectForTextContainer:textContainer].size.width;
     
     return CGRectMake(0, 0, size.width, size.height);
+}
+
+
+#pragma mark - NSWindowDelegate
+
+- (void)windowDidEndLiveResize:(NSNotification *)notification {
+    [self.tableView reloadData];
 }
 
 @end
